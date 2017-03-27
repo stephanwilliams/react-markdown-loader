@@ -84,6 +84,7 @@ function parseMarkdown(markdown) {
         const language = Prism.languages[lang] || Prism.languages.autoit;
         return Prism.highlight(code, language);
       },
+      html: true,
       xhtmlOut: true
     };
 
