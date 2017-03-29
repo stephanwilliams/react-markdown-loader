@@ -75,7 +75,7 @@ function parseCodeBlock(code, lang, langPrefix, highlight) {
  * @param   {MarkdownObject} markdown - Markdown attributes and body
  * @returns {HTMLObject}                HTML and imports
  */
-function parseMarkdown(markdown) {
+function parseMarkdown(markdown, opts) {
   return new Promise((resolve, reject) => {
     let html;
 
@@ -89,6 +89,10 @@ function parseMarkdown(markdown) {
     };
 
     md.set(options);
+
+    if (typeof opts.configureRenderer === 'function') {
+        opts.configureRenderer(md.renderer);
+    }
 
     md.renderer.rules.fence_custom.render = (tokens, idx, options) => {
       // gets tags applied to fence blocks ```react html
@@ -128,8 +132,8 @@ function parseFrontMatter(markdown) {
  * @param  {String} markdown - Markdown string to be parsed
  * @returns {HTMLObject}       HTML and imports
  */
-function parse(markdown) {
-  return parseMarkdown(parseFrontMatter(markdown));
+function parse(markdown, options) {
+  return parseMarkdown(parseFrontMatter(markdown), options);
 }
 
 module.exports = {

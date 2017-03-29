@@ -12,8 +12,10 @@ module.exports = function (content) {
 
   const callback = this.async();
 
+  let options = this.options.reactMarkdownOptions || {};
+
   parser
-    .parse(content)
+    .parse(content, options)
     .then(build)
     .then(component => callback(null, component))
     .catch(callback);
