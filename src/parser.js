@@ -7,6 +7,26 @@ const
   escapeHtml = require('remarkable/lib/common/utils').escapeHtml,
   md = new Remarkable();
 
+let code = md.renderer.rules.code;
+md.renderer.rules.code = function(tokens, idx) {
+    return code(tokens, idx)
+        .replace(/{/g, '{"{"{')
+        .replace(/}/g, '{"}"}')
+        .replace(/{"{"{/g, '{"{"}')
+        .replace(/(\n)/g, '{"\\n"}')
+        .replace(/class=/g, 'className=');
+};
+
+let fence = md.renderer.rules.fence;
+md.renderer.rules.fence = function(tokens, idx, options, env, instance) {
+    return fence(tokens, idx, options, env, instance)
+        .replace(/{/g, '{"{"{')
+        .replace(/}/g, '{"}"}')
+        .replace(/{"{"{/g, '{"{"}')
+        .replace(/(\n)/g, '{"\\n"}')
+        .replace(/class=/g, 'className=');
+};
+
 /**
  * Wraps the code and jsx in an html component
  * for styling it later

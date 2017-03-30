@@ -1,7 +1,6 @@
 'use strict';
 const camelize = require('camelize');
 const except = require('except');
-const HTMLtoJSX = require('htmltojsx');
 
 /**
  * @typedef HTMLObject
@@ -21,8 +20,7 @@ module.exports = function build(markdown) {
   let doImports = 'import React from \'react\';\n';
   const
     imports = markdown.attributes.imports || {},
-    converter = new HTMLtoJSX({ createClass: false }),
-    jsx = converter.convert(markdown.html);
+    jsx = markdown.html.replace(/class=/g, 'className=');
 
   const frontMatterAttributes = except(markdown.attributes, 'imports');
 
@@ -38,6 +36,10 @@ ${doImports}
 
 export const attributes = ${JSON.stringify(camelize(frontMatterAttributes))};
 export default function() {
-  return ${jsx}
+  return (
+    <div>
+      ${jsx}
+    </div>
+  );
 };`;
 };
